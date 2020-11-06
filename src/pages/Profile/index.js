@@ -1,13 +1,12 @@
-import React, { Component } from "react";
+import NavBar from "../../components/NavBar";
 
-class Profile extends Component {
-  render() {
-    return (
-      <div>
-        <h1>Profile Usuário</h1>
-      </div>
-    );
-  }
+function Profile() {
+  return (
+    <>
+      <NavBar />
+      <h1>Profile Usuário</h1>
+    </>
+  );
 }
 
 export default Profile;

@@ -1,0 +1,46 @@
+body {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+
+    background-image: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.6),
+            rgba(0, 0, 0, 0.95)
+    ),
+    url("../../assets/login-bg.jpg");
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+
+.form-login {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    margin: auto;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.5);
+}
+
+.form-login .checkbox {
+    font-weight: 400;
+}
+.form-login .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+}
+.form-login .form-control:focus {
+    z-index: 2;
+}
+.form-login .input-group-prepend {
+    width: 40px;
+}

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import NavBar from "../../components/NavBar";
 
@@ -27,7 +28,12 @@ function Login() {
                 <Button className="mr-2" variant="primary" type="submit">
                   Login
                 </Button>
-                <Button variant="success" type="submit">
+                <Button
+                  as={Link}
+                  to="/register"
+                  variant="success"
+                  type="submit"
+                >
                   Cadastrar
                 </Button>
               </Form.Group>

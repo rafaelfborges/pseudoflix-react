@@ -1,4 +1,4 @@
-body {
+/*.form-login-body {
     display: -ms-flexbox;
     display: flex;
     -ms-flex-align: center;
@@ -15,9 +15,7 @@ body {
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
-}
-
-
+}*/
 
 .form-login {
     width: 100%;
@@ -25,12 +23,13 @@ body {
     padding: 20px;
     margin: auto;
     border-radius: 10px;
-    background: rgba(255,255,255,0.5);
+    background: rgba(109, 102, 102, 0.5);
 }
 
 .form-login .checkbox {
     font-weight: 400;
 }
+
 .form-login .form-control {
     position: relative;
     box-sizing: border-box;

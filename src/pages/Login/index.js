@@ -7,7 +7,7 @@ function Login() {
   return (
     <>
       <NavBar cleanNav={true} />
-      <Container>
+      <Container className="mt-2">
         <Row>
           <Col>
             <Form className="form-login">
@@ -23,9 +23,14 @@ function Login() {
               <Form.Group controlId="formBasicCheckbox">
                 <Form.Check type="checkbox" label="Lembrar E-mail" />
               </Form.Group>
-              <Button variant="primary" type="submit">
-                Submit
-              </Button>
+              <Form.Group className="text-center">
+                <Button className="mr-2" variant="primary" type="submit">
+                  Login
+                </Button>
+                <Button variant="success" type="submit">
+                  Cadastrar
+                </Button>
+              </Form.Group>
             </Form>
           </Col>
         </Row>

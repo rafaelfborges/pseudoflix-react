@@ -8,7 +8,7 @@ function Login() {
   return (
     <>
       <NavBar cleanNav={true} />
-      <Container className="mt-2">
+      <Container className="mt-2 vh-100">
         <Row>
           <Col>
             <Form className="form-login">

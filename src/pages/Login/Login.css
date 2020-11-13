@@ -1,11 +1,10 @@
-/*.form-login-body {
+.background {
     display: -ms-flexbox;
     display: flex;
     -ms-flex-align: center;
     align-items: center;
     padding-top: 40px;
     padding-bottom: 40px;
-
     background-image: linear-gradient(
             to bottom,
             rgba(0, 0, 0, 0.6),
@@ -15,7 +14,7 @@
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
-}*/
+}
 
 .form-login {
     width: 100%;
@@ -23,7 +22,7 @@
     padding: 20px;
     margin: auto;
     border-radius: 10px;
-    background: rgba(109, 102, 102, 0.5);
+    background: darkgray;
 }
 
 .form-login .checkbox {

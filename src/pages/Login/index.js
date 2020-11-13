@@ -8,7 +8,8 @@ function Login() {
   return (
     <>
       <NavBar cleanNav={true} />
-      <Container className="mt-2 vh-100">
+      <div className="background">
+      <Container className="mt-2 min-vh-100">
         <Row>
           <Col>
             <Form className="form-login">
@@ -41,6 +42,7 @@ function Login() {
           </Col>
         </Row>
       </Container>
+      </div>
     </>
   );
 }

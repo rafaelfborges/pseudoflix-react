@@ -28,7 +28,7 @@ function Register() {
       //const response = await api.post("ongs", data);
       const response = await addRegister(data);
 
-      console.log(response);
+      alert("Cadastro realizado com sucesso! Id: " + response.id);
 
       history.push("/login");
     } catch (err) {

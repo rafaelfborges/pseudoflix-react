@@ -7,7 +7,7 @@ function Home() {
   return (
     <>
       <NavBar />
-      <Container fluid="true">
+      <Container>
         <Row className="justify-content-md-center">
           <Col md="auto">filmeA</Col>
           <Col md="auto">filmeB</Col>

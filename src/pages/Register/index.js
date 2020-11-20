@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
+
+import db from "../../database";
 import NavBar from "../../components/NavBar";
 
 function Register() {
@@ -24,12 +26,18 @@ function Register() {
 
     try {
       //const response = await api.post("ongs", data);
-      console.log(data);
+      const response = await addRegister(data);
+
+      console.log(response);
 
       history.push("/login");
     } catch (err) {
       alert("Erro no cadastro, tente novamente.");
     }
+  }
+
+  async function addRegister(data) {
+    return db.collection("users").add(data);
   }
 
   return (

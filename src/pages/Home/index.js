@@ -1,5 +1,7 @@
-import NavBar from "../../components/NavBar";
 import { Container, Row, Col } from "react-bootstrap";
+
+import NavBar from "../../components/NavBar";
+import ContentDetail from "../../components/ContentDetail";
 
 function Home() {
   return (
@@ -15,6 +17,8 @@ function Home() {
           <Col md="auto">filmeF</Col>
         </Row>
       </Container>
+
+      <ContentDetail />
     </>
   );
 }

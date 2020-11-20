@@ -1,62 +1,98 @@
+import { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import NavBar from "../../components/NavBar";
-import {useState} from "react";
-import { Form, Container, Row, Col } from "react-bootstrap";
-
 
 function Profile() {
-    const [nome] = useState("Carlos");
-    const [dataNasc] = useState("02/11/2200");
-    const [email] = useState("carlos@gmail.com");
+  const [nome, setNome] = useState("");
+  const [dataNasc, setDataNasc] = useState("");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+
+  const history = useHistory();
+
+  async function handleRegister(e) {
+    e.preventDefault();
+
+    const data = {
+      nome,
+      dataNasc,
+      email,
+      senha,
+    };
+
+    try {
+      //const response = await api.post("ongs", data);
+      console.log(data);
+
+      history.push("/login");
+    } catch (err) {
+      alert("Erro no cadastro, tente novamente.");
+    }
+  }
 
   return (
     <>
-      <NavBar/>
-      <Container className='container-fluid w-100'>
-          <Row>
-              <Col className='text-center'>
-                  <h1>Perfil do Usuário</h1>
-              </Col>
-          </Row>
-          <Row >
-              <Col xs='12' sm='12' md='6' lg='6' className='align-content-xl-start.'>
-                  <Row >
-                      <Col xs='5' sm='5' md='4' lg='4' className='font-weight-bold'>Nome:</Col>
-                      <Col xs='7' sm='7' md='2' lg='2' className='overflow-auto'>{nome}</Col>
-                  </Row>
-              </Col>
-              <Col xs='12' sm='12' md='6' lg='6'>
-                  <Row>
-                      <Col xs='5' sm='5' md='4' lg='4' className='font-weight-bold'>Email:</Col>
-                      <Col xs='7' sm='7' md='2' lg='2'>{email}</Col>
-                  </Row>
-              </Col>
-              <Col sm='12' md='12' lg='12'>
-                  <hr/>
-              </Col>
-              <Col xs='12'sm='12' md='12' lg='12'>
-                  <Row>
-                      <Col xs='5' sm='5' md='6' lg='4' className='font-weight-bold'>Data de Nascimento:</Col>
-                      <Col xs='7' sm='7' md='6' lg='8'>{dataNasc}</Col>
-                  </Row>
-              </Col>
-          </Row>
-          <hr/>
-          <Row>
-              <Col xs='12' sm='12' md='12' lg='12' >
-                  <Row>
-                      <Col xs='5' sm='5' md='6' lg='6' className='font-weight-bold'>Inserir Arquivo de Perfil:</Col>
-                      <Col xs='7' sm='7' md='6' lg='6' className='overflow-auto'>
-                          <Form>
-                              <Form.Group>
-                                  <Form.File id="formAvatar"/>
-                              </Form.Group>
-                          </Form>
-                      </Col>
-                  </Row>
-              </Col>
-          </Row>
-      </Container>
+      <NavBar />
+      <Container className="mt-3">
+        <Row className="justify-content-md-center">
+          <Col md={6}>
+            <Form onSubmit={handleRegister}>
+              <Form.Group controlId="formBasicName">
+                <Form.Label>Nome</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Digite seu nome completo"
+                  onChange={(e) => setNome(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group controlId="formBasicBirthDate">
+                <Form.Label>Data de Nascimento</Form.Label>
+                <Form.Control
+                  type="date"
+                  onChange={(e) => setDataNasc(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group controlId="formBasicEmail">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Digite seu e-mail"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Form.Group>
 
+              <Form.Group controlId="formBasicPassword">
+                <Form.Label>Senha</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  onChange={(e) => setSenha(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group>
+                <Form.File id="avatar-upload" label="Avatar" />
+              </Form.Group>
+
+              <Form.Group className="text-center">
+                <Button className="mr-2" variant="primary" type="submit">
+                  Salvar
+                </Button>
+
+                <Button
+                  as={Link}
+                  to="/"
+                  variant="outline-secondary"
+                  type="submit"
+                >
+                  Voltar
+                </Button>
+              </Form.Group>
+            </Form>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 }

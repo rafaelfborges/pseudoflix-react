@@ -17,7 +17,6 @@ function Home() {
           <Col md="auto">filmeF</Col>
         </Row>
       </Container>
-
       <ContentDetail />
     </>
   );

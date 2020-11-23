@@ -1,105 +1,97 @@
-//import { useState, useEffect } from "react";
-import { useState } from "react";
+import React, { useRef, useState } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  Card,
+  Alert,
+} from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
 
-import db from "../../database";
-import NavBar from "../../components/NavBar";
+import { useAuth } from "../../contexts/AuthContext";
 
-function Register() {
-  const [nome, setNome] = useState("");
-  const [dataNasc, setDataNasc] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+import Logo from "../../assets/logo.svg";
 
+export default function Register() {
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const passwordConfirmRef = useRef();
+  const { signup } = useAuth();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
 
-  async function handleRegister(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    const data = {
-      nome,
-      dataNasc,
-      email,
-      senha,
-    };
+    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+      return setError("Passwords do not match");
+    }
 
     try {
-      //const response = await api.post("ongs", data);
-      const response = await addRegister(data);
+      setError("");
+      setLoading(true);
 
-      alert("Cadastro realizado com sucesso! Id: " + response.id);
+      const response = await signup(
+        emailRef.current.value,
+        passwordRef.current.value
+      );
 
-      history.push("/login");
-    } catch (err) {
-      alert("Erro no cadastro, tente novamente.");
+      if (response.success) {
+        alert(response.success);
+        history.push("/login");
+      } else if (response.error) {
+        setError(response.error);
+        setLoading(false);
+      }
+    } catch {
+      setError("Failed to create an account");
     }
   }
 
-  async function addRegister(data) {
-    return db.collection("users").add(data);
-  }
-
   return (
-    <>
-      <NavBar cleanNav={true} />
-      <Container className="mt-3">
-        <Row className="justify-content-md-center">
-          <Col md={6}>
-            <Form onSubmit={handleRegister}>
-              <Form.Group controlId="formBasicName">
-                <Form.Label>Nome</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Digite seu nome completo"
-                  onChange={(e) => setNome(e.target.value)}
-                />
-              </Form.Group>
-              <Form.Group controlId="formBasicBirthDate">
-                <Form.Label>Data de Nascimento</Form.Label>
-                <Form.Control
-                  type="date"
-                  onChange={(e) => setDataNasc(e.target.value)}
-                />
-              </Form.Group>
-              <Form.Group controlId="formBasicEmail">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Digite seu e-mail"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </Form.Group>
-
-              <Form.Group controlId="formBasicPassword">
-                <Form.Label>Senha</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="Password"
-                  onChange={(e) => setSenha(e.target.value)}
-                />
-              </Form.Group>
-
-              <Form.Group className="text-center">
-                <Button className="mr-2" variant="primary" type="submit">
+    <Container
+      className="d-flex align-items-center justify-content-center min-vw-100 min-vh-100 background"
+      fluid
+    >
+      <Row>
+        <Col>
+          <Card className="card-bg">
+            <Card.Body>
+              <div className="text-center mb-3">
+                <img className="w-75" src={Logo} alt="Pseudoflix" />
+              </div>
+              {error && <Alert variant="danger">{error}</Alert>}
+              <Form onSubmit={handleSubmit}>
+                <Form.Group id="email">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control type="email" ref={emailRef} required />
+                </Form.Group>
+                <Form.Group id="password">
+                  <Form.Label>Senha</Form.Label>
+                  <Form.Control type="password" ref={passwordRef} required />
+                </Form.Group>
+                <Form.Group id="password-confirm">
+                  <Form.Label>Confirmação senha</Form.Label>
+                  <Form.Control
+                    type="password"
+                    ref={passwordConfirmRef}
+                    required
+                  />
+                </Form.Group>
+                <Button disabled={loading} className="w-100" type="submit">
                   Cadastrar
                 </Button>
-
-                <Button
-                  as={Link}
-                  to="/login"
-                  variant="outline-secondary"
-                  type="submit"
-                >
-                  Voltar
-                </Button>
-              </Form.Group>
-            </Form>
-          </Col>
-        </Row>
-      </Container>
-    </>
+              </Form>
+              <div className="w-100 text-center mt-2">
+                Já possuí uma conta? <Link to="/login">Login</Link>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 }
-
-export default Register;

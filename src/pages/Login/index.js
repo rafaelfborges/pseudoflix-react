@@ -1,82 +1,87 @@
+import { useRef, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
-import NavBar from "../../components/NavBar";
+import {
+  Form,
+  Button,
+  Container,
+  Row,
+  Col,
+  Card,
+  Alert,
+} from "react-bootstrap";
 
-import "./Login.css";
-import { useState } from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
-function Login() {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+import Logo from "../../assets/logo.svg";
 
+export default function Login() {
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const { login } = useAuth();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
 
-  function handleLogin(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    let data = {
-      email: email,
-      senha: senha,
-    };
-
     try {
-      //const response = await api.post("ongs", data);
-      console.log(data);
+      setError("");
+      setLoading(true);
 
-      history.push("/");
-    } catch (err) {
-      alert("Erro ao logar, tente novamente.");
+      const response = await login(
+        emailRef.current.value,
+        passwordRef.current.value
+      );
+
+      if (response) {
+        setError(response);
+        setLoading(false);
+      } else {
+        history.push("/");
+      }
+    } catch (error) {
+      setError("Failed to log in");
+      console.log(error);
     }
   }
 
   return (
-    <>
-      <NavBar cleanNav={true} />
-      <div className="background">
-        <Container className="mt-2 min-vh-100">
-          <Row>
-            <Col>
-              <Form className="form-login" onSubmit={handleLogin}>
-                <Form.Group controlId="formBasicEmail">
-                  <Form.Label>E-mail</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="E-mail"
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <Form.Text className="text-muted"></Form.Text>
+    <Container
+      className="d-flex align-items-center justify-content-center min-vw-100 min-vh-100 background"
+      fluid
+    >
+      <Row>
+        <Col>
+          <Card className="card-bg">
+            <Card.Body>
+              <div className="text-center mb-3">
+                <img className="w-75" src={Logo} alt="Pseudoflix" />
+              </div>
+              {error && <Alert variant="danger">{error}</Alert>}
+              <Form onSubmit={handleSubmit} className="login-form">
+                <Form.Group id="email">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control type="email" ref={emailRef} required />
                 </Form.Group>
-                <Form.Group controlId="formBasicPassword">
+                <Form.Group id="password">
                   <Form.Label>Senha</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="Senha"
-                    onChange={(e) => setSenha(e.target.value)}
-                  />
+                  <Form.Control type="password" ref={passwordRef} required />
                 </Form.Group>
-                <Form.Group controlId="formBasicCheckbox">
-                  <Form.Check type="checkbox" label="Lembrar E-mail" />
-                </Form.Group>
-                <Form.Group className="text-center">
-                  <Button className="mr-2" variant="primary" type="submit">
-                    Login
-                  </Button>
-                  <Button
-                    as={Link}
-                    to="/register"
-                    variant="success"
-                    type="submit"
-                  >
-                    Cadastrar
-                  </Button>
-                </Form.Group>
+                <Button disabled={loading} className="w-100" type="submit">
+                  Entrar
+                </Button>
               </Form>
-            </Col>
-          </Row>
-        </Container>
-      </div>
-    </>
+              <div className="w-100 text-center mt-2">
+                <Link to="/forgot-password">Esqueceu a senha?</Link>
+              </div>
+              <div className="w-100 text-center mt-2">
+                Você é novo aqui? <Link to="/register">Cadastre-se</Link>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 }
-
-export default Login;

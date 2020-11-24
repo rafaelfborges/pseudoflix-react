@@ -18,7 +18,7 @@ export default function Register() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const { signup } = useAuth();
+  const { emailSignup } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -27,14 +27,14 @@ export default function Register() {
     e.preventDefault();
 
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      return setError("Passwords do not match");
+      return setError("Senhas não conferem");
     }
 
     try {
       setError("");
       setLoading(true);
 
-      const response = await signup(
+      const response = await emailSignup(
         emailRef.current.value,
         passwordRef.current.value
       );
@@ -47,7 +47,7 @@ export default function Register() {
         setLoading(false);
       }
     } catch {
-      setError("Failed to create an account");
+      setError("Falha ao criar a conta");
     }
   }
 

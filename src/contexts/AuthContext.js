@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { auth } from "../firebase";
+import { auth, fbAuthProvider } from "../firebase";
 
 const AuthContext = createContext();
 
@@ -11,7 +11,7 @@ function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  async function signup(email, password) {
+  async function emailSignup(email, password) {
     return await auth
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
@@ -23,6 +23,10 @@ function AuthProvider({ children }) {
       .catch((err) => {
         return { error: err.message };
       });
+  }
+
+  function facebookSignup() {
+    return auth.signInWithPopup(fbAuthProvider);
   }
 
   async function login(email, password) {
@@ -59,6 +63,10 @@ function AuthProvider({ children }) {
         setCurrentUser(user);
       }
 
+      if (user !== null && user.providerData[0].providerId === "facebook.com") {
+        setCurrentUser(user);
+      }
+
       setLoading(false);
     });
 
@@ -68,8 +76,9 @@ function AuthProvider({ children }) {
   const value = {
     currentUser,
     login,
-    signup,
+    emailSignup,
     logout,
+    facebookSignup,
     resetPassword,
     updateEmail,
     updatePassword,

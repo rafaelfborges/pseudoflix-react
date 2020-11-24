@@ -31,16 +31,20 @@ function NavBar() {
           <Nav.Link as={Link} to="/">
             Home
           </Nav.Link>
-          <Nav.Link as={Link} to="/">
-            Recentes
-          </Nav.Link>
         </Nav>
         <Form inline>
           <FormControl type="text" placeholder="Search" className="mr-sm-2" />
           <Button variant="outline-success">Pesquisar</Button>
         </Form>
         <Nav className="mr-5 ml-4">
-          <NavDropdown title={currentUser.email} id="basic-nav-dropdown">
+          <NavDropdown
+            title={
+              !!currentUser.displayName
+                ? currentUser.displayName
+                : currentUser.email
+            }
+            id="basic-nav-dropdown"
+          >
             <NavDropdown.Item as={Link} to="/admin">
               Painel Admin
             </NavDropdown.Item>

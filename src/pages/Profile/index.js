@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 
+import NavBar from "../../components/NavBar";
+
 function Profile() {
   const [nome, setNome] = useState("");
   const [dataNasc, setDataNasc] = useState("");
@@ -32,6 +34,7 @@ function Profile() {
 
   return (
     <>
+      <NavBar />
       <Container className="mt-3">
         <Row className="justify-content-md-center">
           <Col md={6}>

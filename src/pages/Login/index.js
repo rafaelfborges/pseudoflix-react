@@ -17,10 +17,24 @@ import Logo from "../../assets/logo.svg";
 export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { login } = useAuth();
+  const { login, facebookSignup } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+
+  async function handleFacebookLogin(e) {
+    e.preventDefault();
+
+    try {
+      setError("");
+      setLoading(true);
+      await facebookSignup();
+
+      history.push("/");
+    } catch (error) {
+      setError("Failed to login with facebook: " + error.message);
+    }
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -42,7 +56,7 @@ export default function Login() {
       }
     } catch (error) {
       setError("Failed to log in");
-      console.log(error);
+      console.log(error.message);
     }
   }
 
@@ -76,7 +90,18 @@ export default function Login() {
                 <Link to="/forgot-password">Esqueceu a senha?</Link>
               </div>
               <div className="w-100 text-center mt-2">
-                Você é novo aqui? <Link to="/register">Cadastre-se</Link>
+                Você é novo aqui?
+                <Link to="/register"> Cadastre-se</Link>
+              </div>
+              <div className="w-100 text-center mt-2">
+                <p className="m-0 p-0 mb-2">Ou</p>
+                <Button
+                  disabled={loading}
+                  className="w-100"
+                  onClick={handleFacebookLogin}
+                >
+                  Login com Facebook
+                </Button>
               </div>
             </Card.Body>
           </Card>

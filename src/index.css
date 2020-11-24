@@ -34,4 +34,5 @@ code {
 .card-bg {
   background-color: rgba(255,255,255,0.7) !important;
   border-radius: .40rem !important;
+  max-width: 380px !important;
 }

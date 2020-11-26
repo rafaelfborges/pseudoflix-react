@@ -1,44 +1,41 @@
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { Link, useHistory } from "react-router-dom";
+import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 
 import NavBar from "../../components/NavBar";
+import { db } from "../../firebase";
 
 function Admin() {
-  const [nomeFilme, setNomeFilme] = useState("");
-  const [descricao, setDesc] = useState("");
-  const [genero, setGenero] = useState("");
-  const [dataLanc, setDataLanc] = useState("");
-  const [urlVideo, setUrlVideo] = useState("");
-  const [urlPoster, setUrlPoster] = useState("");
+  const [movie, setMovie] = useState([]);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const history = useHistory();
+  function onChangeValue(e) {
+    setMovie((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  }
 
   async function handleRegisterMovie(e) {
     e.preventDefault();
-
-    const data = {
-      nomeFilme,
-      descricao,
-      genero,
-      dataLanc,
-      urlVideo,
-      urlPoster,
-    };
-
     try {
-      //const response = await api.post("ongs", data);
-      console.log(data);
-
-      history.push("/login");
-    } catch (err) {
-      alert("Erro no cadastro, tente novamente.");
+      setLoading(true);
+      await db.collection("movies").add(movie);
+      setSuccess("Filme cadastrado com sucesso!");
+      setLoading(false);
+    } catch (error) {
+      setError(error);
     }
   }
+
   return (
     <>
       <NavBar />
       <Container className="mt-3">
+        {success && <Alert variant="success">{success}</Alert>}
+        {error && <Alert variant="danger">{error}</Alert>}
         <Form onSubmit={handleRegisterMovie}>
           <Row className="justify-content-md-center">
             <Col md={6}>
@@ -46,8 +43,9 @@ function Admin() {
                 <Form.Label>Nome do Filme</Form.Label>
                 <Form.Control
                   type="Text"
+                  name="name"
                   placeholder="Digite o nome do filme"
-                  onChange={(e) => setNomeFilme(e.target.value)}
+                  onChange={onChangeValue}
                 />{" "}
               </Form.Group>
 
@@ -55,8 +53,9 @@ function Admin() {
                 <Form.Label>Gênero</Form.Label>
                 <Form.Control
                   type="Text"
+                  name="genre"
                   placeholder="Digite Gênero"
-                  onChange={(e) => setGenero(e.target.value)}
+                  onChange={onChangeValue}
                 />
               </Form.Group>
 
@@ -64,8 +63,9 @@ function Admin() {
                 <Form.Label>Descrição</Form.Label>
                 <Form.Control
                   as="textarea"
+                  name="description"
                   placeholder="Digite a descrição"
-                  onChange={(e) => setDesc(e.target.value)}
+                  onChange={onChangeValue}
                 />
               </Form.Group>
             </Col>
@@ -75,8 +75,9 @@ function Admin() {
                 <Form.Label>Data de Lançamento</Form.Label>
                 <Form.Control
                   type="date"
+                  name="launchDate"
                   placeholder="Escolha a data de lançamento"
-                  onChange={(e) => setDataLanc(e.target.value)}
+                  onChange={onChangeValue}
                 />{" "}
               </Form.Group>
 
@@ -84,8 +85,9 @@ function Admin() {
                 <Form.Label>Poster</Form.Label>
                 <Form.Control
                   type="Text"
+                  name="urlPoster"
                   placeholder="Digite a Url do Poster"
-                  onChange={(e) => setUrlPoster(e.target.value)}
+                  onChange={onChangeValue}
                 />{" "}
               </Form.Group>
 
@@ -93,20 +95,26 @@ function Admin() {
                 <Form.Label>Url Video</Form.Label>
                 <Form.Control
                   type="Text"
+                  name="urlVideo"
                   placeholder="Digite a Url do Video"
-                  onChange={(e) => setUrlVideo(e.target.value)}
+                  onChange={onChangeValue}
                 />
               </Form.Group>
 
               <Form.Group className="text-center">
-                <Button className="mr-2" variant="primary" type="submit">
+                <Button
+                  disabled={loading}
+                  className="mr-2"
+                  variant="primary"
+                  type="submit"
+                >
                   Cadastrar
                 </Button>
                 <Button
+                  disabled={loading}
                   as={Link}
-                  to="/login"
+                  to="/"
                   variant="outline-secondary"
-                  type="submit"
                 >
                   Voltar
                 </Button>

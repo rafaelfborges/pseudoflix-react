@@ -28,6 +28,7 @@ export default function Login() {
     try {
       setError("");
       setLoading(true);
+
       await facebookSignup();
 
       history.push("/");

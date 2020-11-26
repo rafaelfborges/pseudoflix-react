@@ -57,16 +57,19 @@ function AuthProvider({ children }) {
     return currentUser.updatePassword(password);
   }
 
+  function updateProfile(profile) {
+    return currentUser.updateProfile(profile);
+  }
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user !== null && user.emailVerified) {
-        setCurrentUser(user);
-      }
+      if (user) {
+        const { providerId } = user.providerData[0];
 
-      if (user !== null && user.providerData[0].providerId === "facebook.com") {
-        setCurrentUser(user);
+        if (user.emailVerified || providerId === "facebook.com") {
+          setCurrentUser(user);
+        }
       }
-
       setLoading(false);
     });
 
@@ -82,6 +85,7 @@ function AuthProvider({ children }) {
     resetPassword,
     updateEmail,
     updatePassword,
+    updateProfile,
   };
 
   return (

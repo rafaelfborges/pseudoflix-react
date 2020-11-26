@@ -1,35 +1,64 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import {
+  Alert,
+  Form,
+  Image,
+  Button,
+  Container,
+  Row,
+  Col,
+} from "react-bootstrap";
+
+import { useAuth } from "../../contexts/AuthContext";
 
 import NavBar from "../../components/NavBar";
 
 function Profile() {
-  const [nome, setNome] = useState("");
-  const [dataNasc, setDataNasc] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const nameRef = useRef();
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const passwordConfirmRef = useRef();
 
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const { currentUser, updatePassword, updateEmail, updateProfile } = useAuth();
   const history = useHistory();
 
-  async function handleRegister(e) {
+  function handleSubmit(e) {
     e.preventDefault();
 
-    const data = {
-      nome,
-      dataNasc,
-      email,
-      senha,
-    };
-
-    try {
-      //const response = await api.post("ongs", data);
-      console.log(data);
-
-      history.push("/login");
-    } catch (err) {
-      alert("Erro no cadastro, tente novamente.");
+    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+      return setError("Passwords do not match");
     }
+
+    const promises = [];
+    setLoading(true);
+    setError("");
+
+    if (emailRef.current.value !== currentUser.email) {
+      promises.push(updateEmail(emailRef.current.value));
+    }
+
+    if (passwordRef.current.value) {
+      promises.push(updatePassword(passwordRef.current.value));
+    }
+
+    if (nameRef.current.value !== currentUser.displayName) {
+      promises.push(updatePassword(passwordRef.current.value));
+    }
+
+    Promise.all(promises)
+      .then(() => {
+        history.push("/");
+      })
+      .catch(() => {
+        setError("Failed to update account");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   return (
@@ -38,28 +67,30 @@ function Profile() {
       <Container className="mt-3">
         <Row className="justify-content-md-center">
           <Col md={6}>
-            <Form onSubmit={handleRegister}>
+            {error && <Alert variant="danger">{error}</Alert>}
+
+            <Image
+              src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=5152897338057307&height=100&width=100&ext=1608864848&hash=AeSpCA0dzywJdNlyO00"
+              roundedCircle
+            />
+
+            <Form onSubmit={handleSubmit}>
               <Form.Group controlId="formBasicName">
                 <Form.Label>Nome</Form.Label>
                 <Form.Control
                   type="text"
+                  ref={nameRef}
                   placeholder="Digite seu nome completo"
-                  onChange={(e) => setNome(e.target.value)}
-                />
-              </Form.Group>
-              <Form.Group controlId="formBasicBirthDate">
-                <Form.Label>Data de Nascimento</Form.Label>
-                <Form.Control
-                  type="date"
-                  onChange={(e) => setDataNasc(e.target.value)}
+                  defaultValue={currentUser.displayName}
                 />
               </Form.Group>
               <Form.Group controlId="formBasicEmail">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="email"
+                  ref={emailRef}
                   placeholder="Digite seu e-mail"
-                  onChange={(e) => setEmail(e.target.value)}
+                  defaultValue={currentUser.email}
                 />
               </Form.Group>
 
@@ -67,8 +98,17 @@ function Profile() {
                 <Form.Label>Senha</Form.Label>
                 <Form.Control
                   type="password"
-                  placeholder="Password"
-                  onChange={(e) => setSenha(e.target.value)}
+                  ref={passwordRef}
+                  placeholder="Deixe em branco para manter a atual"
+                />
+              </Form.Group>
+
+              <Form.Group controlId="formBasicPasswordConfirm">
+                <Form.Label>Senha</Form.Label>
+                <Form.Control
+                  type="password"
+                  ref={passwordConfirmRef}
+                  placeholder="Deixe em branco para manter a atual"
                 />
               </Form.Group>
 
@@ -77,13 +117,19 @@ function Profile() {
               </Form.Group>
 
               <Form.Group className="text-center">
-                <Button className="mr-2" variant="primary" type="submit">
+                <Button
+                  disabled={loading}
+                  className="mr-2"
+                  variant="primary"
+                  type="submit"
+                >
                   Salvar
                 </Button>
 
                 <Button
                   as={Link}
                   to="/"
+                  disabled={loading}
                   variant="outline-secondary"
                   type="submit"
                 >

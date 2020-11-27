@@ -5,6 +5,7 @@ import { Form, FormControl, Button, Image } from "react-bootstrap";
 import { useAuth } from "../../contexts/AuthContext";
 
 import Logo from "../../assets/logo.png";
+import NoAvatar from "../../assets/no-avatar.jpg";
 
 function NavBar() {
   const { currentUser, logout } = useAuth();
@@ -42,7 +43,7 @@ function NavBar() {
         </Form>
         <Nav className="mr-5 ml-4">
           <Image
-            src={currentUser.photoURL}
+            src={!!currentUser.photoURL ? currentUser.photoURL : NoAvatar}
             roundedCircle
             className="navbar-sm-avatar"
           />

@@ -72,6 +72,7 @@ export default function Admin() {
                   as="textarea"
                   name="description"
                   placeholder="Digite a descrição"
+                  rows={3}
                   onChange={onChangeValue}
                 />
               </Form.Group>

@@ -67,9 +67,11 @@ export default function Profile() {
           <Col md={6}>
             {error && <Alert variant="danger">{error}</Alert>}
 
-            <Image src={currentUser.photoURL} roundedCircle />
+            <div className="text-center mt-3">
+              <Image src={currentUser.photoURL} roundedCircle />
+            </div>
 
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} className="mt-4">
               <Form.Group controlId="formBasicName">
                 <Form.Label>Nome</Form.Label>
                 <Form.Control

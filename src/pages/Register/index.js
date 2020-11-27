@@ -1,17 +1,9 @@
-import React, { useRef, useState } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  Card,
-  Alert,
-} from "react-bootstrap";
+import { useRef, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { Container, Col, Row } from "react-bootstrap";
+import { Alert, Button, Card, Form } from "react-bootstrap";
 
 import { useAuth } from "../../contexts/AuthContext";
-
 import Logo from "../../assets/logo.svg";
 
 export default function Register() {
@@ -23,7 +15,7 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
@@ -31,9 +23,7 @@ export default function Register() {
     }
 
     try {
-      setError("");
       setLoading(true);
-
       const response = await emailSignup(
         emailRef.current.value,
         passwordRef.current.value
@@ -49,7 +39,7 @@ export default function Register() {
     } catch {
       setError("Falha ao criar a conta");
     }
-  }
+  };
 
   return (
     <Container

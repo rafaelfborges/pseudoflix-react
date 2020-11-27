@@ -3,30 +3,28 @@ import { Link, useHistory } from "react-router-dom";
 import {
   Alert,
   Form,
-  Image,
   Button,
   Container,
   Row,
   Col,
+  Image,
 } from "react-bootstrap";
 
 import { useAuth } from "../../contexts/AuthContext";
 
 import NavBar from "../../components/NavBar";
 
-function Profile() {
+export default function Profile() {
   const nameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const { currentUser, updatePassword, updateEmail, updateProfile } = useAuth();
+  const { currentUser, updatePassword, updateEmail } = useAuth();
   const history = useHistory();
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
@@ -59,7 +57,7 @@ function Profile() {
       .finally(() => {
         setLoading(false);
       });
-  }
+  };
 
   return (
     <>
@@ -69,10 +67,7 @@ function Profile() {
           <Col md={6}>
             {error && <Alert variant="danger">{error}</Alert>}
 
-            <Image
-              src="https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=5152897338057307&height=100&width=100&ext=1608864848&hash=AeSpCA0dzywJdNlyO00"
-              roundedCircle
-            />
+            <Image src={currentUser.photoURL} roundedCircle />
 
             <Form onSubmit={handleSubmit}>
               <Form.Group controlId="formBasicName">
@@ -143,5 +138,3 @@ function Profile() {
     </>
   );
 }
-
-export default Profile;

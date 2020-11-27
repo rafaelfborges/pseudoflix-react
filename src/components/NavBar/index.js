@@ -1,6 +1,6 @@
 import { Link, useHistory } from "react-router-dom";
 import { Nav, Navbar, NavDropdown } from "react-bootstrap";
-import { Form, FormControl, Button } from "react-bootstrap";
+import { Form, FormControl, Button, Image } from "react-bootstrap";
 
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -33,10 +33,19 @@ function NavBar() {
           </Nav.Link>
         </Nav>
         <Form inline>
-          <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+          <FormControl
+            type="text"
+            placeholder="Digite sua busca aqui"
+            className="mr-sm-2"
+          />
           <Button variant="outline-success">Pesquisar</Button>
         </Form>
         <Nav className="mr-5 ml-4">
+          <Image
+            src={currentUser.photoURL}
+            roundedCircle
+            className="navbar-sm-avatar"
+          />
           <NavDropdown
             title={
               !!currentUser.displayName

@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import { createContext, useContext, useState, useEffect } from "react";
 import { auth, fbAuthProvider } from "../firebase";
 
@@ -8,6 +10,7 @@ function useAuth() {
 }
 
 function AuthProvider({ children }) {
+  const [photo, setPhoto] = useState("");
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
@@ -25,8 +28,17 @@ function AuthProvider({ children }) {
       });
   }
 
-  function facebookSignup() {
-    return auth.signInWithPopup(fbAuthProvider);
+  async function facebookSignup() {
+    await auth
+      .signInWithPopup(fbAuthProvider)
+      .then(async ({ credential, user }) => {
+        const id = user.providerData[0].uid;
+        const accessToken = credential.accessToken;
+        const { data } = await axios.get(
+          `https://graph.facebook.com/${id}?fields=picture.type(normal)&access_token=${accessToken}`
+        );
+        setPhoto(data.picture.data.url);
+      });
   }
 
   async function login(email, password) {
@@ -57,8 +69,8 @@ function AuthProvider({ children }) {
     return currentUser.updatePassword(password);
   }
 
-  function updateProfile(profile) {
-    return currentUser.updateProfile(profile);
+  async function updateProfile(profile) {
+    return await currentUser.updateProfile(profile);
   }
 
   useEffect(() => {
@@ -70,11 +82,19 @@ function AuthProvider({ children }) {
           setCurrentUser(user);
         }
       }
+
+      if (currentUser && photo) {
+        currentUser.updateProfile(
+          currentUser.photoURL !== photo && { photoURL: photo }
+        );
+        setPhoto("");
+      }
+
       setLoading(false);
     });
 
     return unsubscribe;
-  }, []);
+  }, [currentUser, photo]);
 
   const value = {
     currentUser,

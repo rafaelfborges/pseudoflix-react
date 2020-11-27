@@ -1,17 +1,9 @@
 import { useRef, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import {
-  Form,
-  Button,
-  Container,
-  Row,
-  Col,
-  Card,
-  Alert,
-} from "react-bootstrap";
+import { Container, Col, Row } from "react-bootstrap";
+import { Alert, Button, Card, Form } from "react-bootstrap";
 
 import { useAuth } from "../../contexts/AuthContext";
-
 import Logo from "../../assets/logo.svg";
 
 export default function Login() {
@@ -22,28 +14,23 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
-  async function handleFacebookLogin(e) {
+  const handleFacebookLogin = async (e) => {
     e.preventDefault();
 
     try {
-      setError("");
       setLoading(true);
-
       await facebookSignup();
-
       history.push("/");
     } catch (error) {
       setError("Failed to login with facebook: " + error.message);
     }
-  }
+  };
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      setError("");
       setLoading(true);
-
       const response = await login(
         emailRef.current.value,
         passwordRef.current.value
@@ -59,7 +46,7 @@ export default function Login() {
       setError("Failed to log in");
       console.log(error.message);
     }
-  }
+  };
 
   return (
     <Container

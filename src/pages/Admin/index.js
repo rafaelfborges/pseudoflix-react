@@ -6,7 +6,7 @@ import NavBar from "../../components/NavBar";
 import { db } from "../../firebase";
 
 export default function Admin() {
-  const [movie, setMovie] = useState([]);
+  const [movie, setMovie] = useState({});
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,8 +25,10 @@ export default function Admin() {
 
   const handleRegisterMovie = async (e) => {
     e.preventDefault();
+
     try {
       setLoading(true);
+      movie["comments"] = [];
       await db.collection("movies").add(movie);
       document.getElementById("form-register").reset();
       setSuccess("Filme cadastrado com sucesso!");

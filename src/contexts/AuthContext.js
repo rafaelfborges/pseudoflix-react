@@ -17,8 +17,8 @@ function AuthProvider({ children }) {
   async function emailSignup(email, password) {
     return await auth
       .createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        auth.currentUser.sendEmailVerification();
+      .then(async () => {
+        await auth.currentUser.sendEmailVerification();
         return {
           success: "Cadastro realizado com sucesso! Verifique seu e-mail!",
         };

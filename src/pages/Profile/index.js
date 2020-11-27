@@ -28,7 +28,7 @@ export default function Profile() {
     e.preventDefault();
 
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      return setError("Passwords do not match");
+      return setError("Senhas não conferem");
     }
 
     const promises = [];
@@ -52,7 +52,7 @@ export default function Profile() {
         history.push("/");
       })
       .catch(() => {
-        setError("Failed to update account");
+        setError("Falha ao atualizar a conta");
       })
       .finally(() => {
         setLoading(false);
@@ -107,10 +107,6 @@ export default function Profile() {
                   ref={passwordConfirmRef}
                   placeholder="Deixe em branco para manter a atual"
                 />
-              </Form.Group>
-
-              <Form.Group>
-                <Form.File id="avatar-upload" label="Avatar" />
               </Form.Group>
 
               <Form.Group className="text-center">

@@ -3,6 +3,7 @@ import { Col, Container, Button, Modal, Row } from "react-bootstrap";
 
 import { getOneMovie, findAllMovies } from "../../dao";
 
+import Comment from "../../components/Comment";
 import NavBar from "../../components/NavBar";
 import Loading from "../../components/Loading";
 
@@ -10,6 +11,7 @@ export default function Home() {
   const [show, setShow] = useState(false);
   const [movies, setMovies] = useState([]);
   const [movie, setMovie] = useState([]);
+
   const [loading, setLoading] = useState(true);
 
   const handleClose = () => setShow(false);
@@ -87,6 +89,7 @@ export default function Home() {
               </p>
             </Col>
           </Row>
+          <Comment movie={movie} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
